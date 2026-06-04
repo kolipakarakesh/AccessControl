@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36121.58 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessControl.Web.API", "AccessControl.Web.API\AccessControl.Web.API.csproj", "{3DF3591B-3997-4C37-9F51-E572AF7EAC68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessControl.Web.UI", "AccessControl.Web.UI\AccessControl.Web.UI.csproj", "{4BEE98F1-0648-4948-908F-8403559D1832}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3DF3591B-3997-4C37-9F51-E572AF7EAC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DF3591B-3997-4C37-9F51-E572AF7EAC68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DF3591B-3997-4C37-9F51-E572AF7EAC68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BEE98F1-0648-4948-908F-8403559D1832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BEE98F1-0648-4948-908F-8403559D1832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BEE98F1-0648-4948-908F-8403559D1832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BEE98F1-0648-4948-908F-8403559D1832}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
