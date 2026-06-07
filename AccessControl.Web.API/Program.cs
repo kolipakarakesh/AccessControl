@@ -10,6 +10,12 @@ namespace AccessControl.Web.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Configure Logging
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddLog4Net("log4net.config");
+
+            // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -27,7 +33,7 @@ namespace AccessControl.Web.API
             // Configure Swagger Middleware
             if (app.Environment.IsDevelopment())
             {
-                object value = app.UseSwagger();
+                app.UseSwagger();
                 app.UseSwaggerUI();
             }
 

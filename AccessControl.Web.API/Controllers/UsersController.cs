@@ -1,6 +1,7 @@
 ﻿using AccessControl.Web.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AccessControl.Web.API.Controllers
 {
@@ -9,9 +10,11 @@ namespace AccessControl.Web.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(IUserService userService, ILogger<UsersController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -20,6 +23,7 @@ namespace AccessControl.Web.API.Controllers
             try
             {
                 var users = await _userService.GetAllUsersAsync();
+                _logger.LogInformation("Retrieved {Count} users", JsonConvert.SerializeObject(users));
                 return Ok(users);
             }
             catch (Exception ex)
