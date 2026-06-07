@@ -9,7 +9,7 @@ namespace AccessControl.Web.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService) 
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -17,13 +17,33 @@ namespace AccessControl.Web.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
+            try
+            {
+
+                if (id <= 0)
+                {
+                    return BadRequest("Invalid user ID.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+
+            }
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
@@ -34,30 +54,82 @@ namespace AccessControl.Web.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(Models.User user)
         {
-            var createdUser = await _userService.CreateUserAsync(user);
-            return Ok (createdUser);
+            try
+            {
+                if (user == null)
+                {
+                    return BadRequest("User data is null.");
+                }
+                if (string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+                {
+                    return BadRequest("Name, Email, and Password are required fields.");
+                }
+                var createdUser = await _userService.CreateUserAsync(user);
+                return Ok(createdUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateUser(int id, Models.User user)
         {
-            var updatedUser = await _userService.UpdateUserAsync(id, user);
-            if (updatedUser == null)
+            try
             {
-                return NotFound();
+
+                if (id <= 0)
+                {
+                    return BadRequest("Invalid user ID.");
+                }
+                if (user == null)
+                {
+                    return BadRequest("User data is null.");
+                }
+                if (string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+                {
+                    return BadRequest("Name, Email, and Password are required fields.");
+                }
+                var updatedUser = await _userService.UpdateUserAsync(id, user);
+                if (updatedUser == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedUser);
             }
-            return Ok(updatedUser);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+
+            }
         }
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var isDeleted = await _userService.DeleteUserAsync(id);
-            if (!isDeleted)
+            try
             {
-                return NotFound();
+
+                if (id <= 0)
+                {
+                    return BadRequest("Invalid user ID.");
+                }
+                var isDeleted = await _userService.DeleteUserAsync(id);
+                if (!isDeleted)
+                {
+                    return Ok(false);
+                }
+                return Ok(true);
             }
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+
+            }
+
         }
     }
 }
