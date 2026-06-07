@@ -1,4 +1,3 @@
-
 using AccessControl.Web.API.DBConfiguration;
 using AccessControl.Web.API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,27 +10,30 @@ namespace AccessControl.Web.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                                                            options.UseSqlServer(
-                                                            builder.Configuration.GetConnectionString("DefaultConnection")));
-
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
+
             builder.Services.AddScoped<IUserService, UserService>();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+
+            // Swagger Services
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure Swagger Middleware
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                object value = app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
-            app.UseAuthorization();
+            app.UseHttpsRedirection();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
