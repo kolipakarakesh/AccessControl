@@ -23,6 +23,7 @@ namespace AccessControl.Web.API
             builder.Services.AddControllers();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRoleService, RolesService>();
 
             // Swagger Services
             builder.Services.AddEndpointsApiExplorer();
