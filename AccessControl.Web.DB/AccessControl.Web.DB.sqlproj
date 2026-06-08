@@ -66,8 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="AccessControlDB\Tables\User.sql" />
+    <Build Include="AccessControlDB\Tables\Role.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="AccessControlDB\Post-Deployment\Script.PostDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AccessControlDB\Post-Deployment\RoleScript.PostDeployment.sql" />
   </ItemGroup>
 </Project>
