@@ -54,6 +54,7 @@ namespace AccessControl.Web.API
 
             // Swagger Services
             builder.Services.AddEndpointsApiExplorer();
+           
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

@@ -21,7 +21,7 @@ namespace AccessControl.Web.API.Helpers
                 var _token = authTokens.FirstOrDefault();
 
 
-                string _jwtToken = _token != null && _token.StartsWith("Bearer ") ? _token.Substring("Bearer ".Length).Trim() : null;
+                string _jwtToken = _token;
 
                 if (_jwtToken != null)
                 {
@@ -71,6 +71,19 @@ namespace AccessControl.Web.API.Helpers
                             },
                         };
                     }
+                }
+                else
+                {
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.ExpectationFailed;
+                    context.HttpContext.Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "Please Provide Authorization";
+                    context.Result = new JsonResult("Please Provide Authorization")
+                    {
+                        Value = new
+                        {
+                            Status = "Error",
+                            Message = "Please Provide authToken"
+                        },
+                    };
                 }
 
             }
