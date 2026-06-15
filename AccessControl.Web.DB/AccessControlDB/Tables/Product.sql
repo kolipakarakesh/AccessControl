@@ -10,5 +10,6 @@
     IsActive        BIT                 NULL DEFAULT 1,
     CreatedBy       VARCHAR(100)        NULL,
     CreatedDate     DATETIME            NULL DEFAULT GETDATE(),
-    ModifiedBy      VARCHAR(100)        NULL
+    ModifiedBy      VARCHAR(100)        NULL,
+    ModifiedDate    DATETIME            NULL
 );

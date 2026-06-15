@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace AccessControl.Web.API.Helpers
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.All)]
     public class AccessControlAutherise : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)

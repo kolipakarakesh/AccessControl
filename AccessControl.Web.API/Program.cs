@@ -2,10 +2,8 @@ using AccessControl.Web.API.DBConfiguration;
 using AccessControl.Web.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Configuration;
 using System.Text;
 
 namespace AccessControl.Web.API
@@ -31,6 +29,7 @@ namespace AccessControl.Web.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRoleService, RolesService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var tokenKey = builder.Configuration.GetValue<string>("TokenKey");
 
@@ -54,7 +53,7 @@ namespace AccessControl.Web.API
 
             // Swagger Services
             builder.Services.AddEndpointsApiExplorer();
-           
+
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

@@ -75,7 +75,9 @@ INSERT
     StockQuantity,
     IsActive,
     CreatedBy,
-    CreatedDate
+    CreatedDate,
+    ModifiedBy,
+    ModifiedDate
 )
 VALUES
 (
@@ -87,5 +89,7 @@ VALUES
     Source.StockQuantity,
     1,
     'System',
+    GETDATE(),
+     'System',
     GETDATE()
 );
