@@ -16,5 +16,6 @@ namespace AccessControl.Web.API.DBConfiguration
         public DbSet<User> users { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order>Orders { get; set; }
     }
 }

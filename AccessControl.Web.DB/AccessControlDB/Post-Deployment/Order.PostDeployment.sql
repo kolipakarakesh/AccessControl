@@ -49,7 +49,9 @@ BEGIN
             Status,
             IsActive,
             CreatedBy,
-            CreatedDate
+            CreatedDate,
+            ModifiedBy,
+            ModifiedDate
         )
         VALUES
         (
@@ -61,6 +63,8 @@ BEGIN
             DATEADD(DAY, -@OrderCounter, GETDATE()),
             'Delivered',
             1,
+            'System',
+            GETDATE(),
             'System',
             GETDATE()
         );
@@ -76,7 +80,9 @@ BEGIN
             TotalPrice,
             IsActive,
             CreatedBy,
-            CreatedDate
+            CreatedDate,
+            ModifiedBy,
+            ModifiedDate
         )
         SELECT TOP 5
             @OrderId,
@@ -85,6 +91,8 @@ BEGIN
             Price,
             Price * (1 + ABS(CHECKSUM(NEWID())) % 3),
             1,
+            'System',
+            GETDATE(),
             'System',
             GETDATE()
         FROM Product
