@@ -30,6 +30,7 @@ namespace AccessControl.Web.API
             builder.Services.AddScoped<IRoleService, RolesService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
 
             var tokenKey = builder.Configuration.GetValue<string>("TokenKey");
 
