@@ -44,12 +44,18 @@ namespace AccessControl.Web.API.Services
 
         public async Task<Order?> GetOrderByIdAsync(int OrderId)
         {
-            return await _dbContext.Orders.FindAsync(OrderId);
+            // return await _dbContext.Orders.FindAsync(OrderId);
+            return await _dbContext.Orders
+                        .Include(o => o.OrderItems)
+                        .FirstOrDefaultAsync(o => o.OrderId == OrderId);
         }
 
         public async Task<List<Order>> GetOrdersAsync()
         {
-            return await _dbContext.Orders.ToListAsync();
+            //return await _dbContext.Orders.ToListAsync();
+            return await _dbContext.Orders
+                       .Include(o => o.OrderItems)
+                       .ToListAsync();
         }
 
         public async Task<Order> UpdateOrderAsync(int OrderId, Order order)
