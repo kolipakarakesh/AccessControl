@@ -23,8 +23,14 @@ namespace AccessControl.Web.API.Models
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public string ModifiedBy { get; set; } = string.Empty;
         public DateTime ModifiedDate { get; set; }=DateTime.UtcNow;
+        public virtual ICollection<OrderItem> OrderItems
+        {
+            get;
+            set;
+        } = new List<OrderItem>();
 
     }
+
 }
 
 
