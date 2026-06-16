@@ -11,7 +11,30 @@ namespace AccessControl.Web.API.Services
         {
             _dbContext= dbContext;
         }
-      public async Task<Order> CreateOrderAsync(Order order)
+
+        public async Task<List<Order>> GetOrdersOnlyAsync()
+        {
+            return await _dbContext.Orders.ToListAsync();
+        }
+
+        public async Task<List<Order>> GetOrdersAsync()
+        {
+            return await _dbContext.Orders
+                       .Include(o => o.OrderItems)
+                       .ToListAsync();
+        }
+
+        public async Task<Order?> GetOrderOnlyByIdAsync(int OrderId)
+        {
+            return await _dbContext.Orders.FindAsync(OrderId);
+        }
+
+        public async Task<Order?> GetOrderByIdAsync(int OrderId)
+        {
+            return await _dbContext.Orders.Include(o => o.OrderItems)
+                          .FirstOrDefaultAsync(o => o.OrderId == OrderId);
+        }
+        public async Task<Order> CreateOrderAsync(Order order)
         {
             if (order==null)
             {
@@ -21,6 +44,32 @@ namespace AccessControl.Web.API.Services
             await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
 
+            return order;
+        }
+
+        public async Task<Order> UpdateOrderAsync(int OrderId, Order order)
+        {
+            //find the respective object from the database using id
+            //equel the database value to incoming values 
+            //save the changes to database
+            var OrderToUpdate = await _dbContext.Orders.FindAsync(OrderId);
+            if (OrderToUpdate == null)
+            {
+                throw new KeyNotFoundException("Order Not Found.");
+            }
+            OrderToUpdate.OrderId = order.OrderId;
+            OrderToUpdate.OrderNumber = order.OrderNumber;
+            OrderToUpdate.CustomerName = order.CustomerName;
+            OrderToUpdate.CustomerEmail = order.CustomerEmail;
+            OrderToUpdate.CustomerPhone = order.CustomerPhone;
+            OrderToUpdate.TotalAmount = order.TotalAmount;
+            OrderToUpdate.OrderDate = order.OrderDate;
+            OrderToUpdate.Status = order.Status;
+            OrderToUpdate.ModifiedBy = order.ModifiedBy;
+            OrderToUpdate.ModifiedDate = DateTime.UtcNow;
+            OrderToUpdate.IsActive = order.IsActive;
+
+            await _dbContext.SaveChangesAsync();
             return order;
         }
 
@@ -39,50 +88,7 @@ namespace AccessControl.Web.API.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
-       
-
-        public async Task<Order?> GetOrderByIdAsync(int OrderId)
-        {
-            // return await _dbContext.Orders.FindAsync(OrderId);
-            return await _dbContext.Orders
-                        .Include(o => o.OrderItems)
-                        .FirstOrDefaultAsync(o => o.OrderId == OrderId);
-        }
-
-        public async Task<List<Order>> GetOrdersAsync()
-        {
-            //return await _dbContext.Orders.ToListAsync();
-            return await _dbContext.Orders
-                       .Include(o => o.OrderItems)
-                       .ToListAsync();
-        }
-
-        public async Task<Order> UpdateOrderAsync(int OrderId, Order order)
-        {
-            //find the respective object from the database using id
-            //equel the database value to incoming values 
-            //save the changes to database
-           var OrderToUpdate= await _dbContext.Orders.FindAsync(OrderId);
-            if (OrderToUpdate == null)
-            {
-                throw new KeyNotFoundException("Order Not Found.");
-            }
-            OrderToUpdate.OrderId = order.OrderId;
-            OrderToUpdate.OrderNumber= order.OrderNumber;
-            OrderToUpdate.CustomerName= order.CustomerName;
-            OrderToUpdate.CustomerEmail= order.CustomerEmail;
-            OrderToUpdate.CustomerPhone= order.CustomerPhone;
-            OrderToUpdate.TotalAmount= order.TotalAmount;
-            OrderToUpdate.OrderDate = order.OrderDate;
-            OrderToUpdate.Status= order.Status;
-            OrderToUpdate.ModifiedBy= order.ModifiedBy;
-            OrderToUpdate.ModifiedDate = DateTime.UtcNow;
-            OrderToUpdate.IsActive = order.IsActive;
-
-            await _dbContext.SaveChangesAsync();
-            return order;
-        }
+        
         public void Dispose()
         {
             _dbContext.Dispose();

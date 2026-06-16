@@ -34,6 +34,21 @@ namespace AccessControl.Web.API.Controllers
             }
         }
 
+        [HttpGet("OrdersOnly")]
+        public async Task<IActionResult> GetAllOrdersOnly()
+        {
+            try
+            {
+                var orders = await _orderService.GetOrdersOnlyAsync();
+                _logger.LogInformation("Retrieved {Count} Orders", orders.Count);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Internal Server Error : {ex.Message}");
+                return StatusCode(500, $"Internal Server Error : {ex.Message}");
+            }
+        }
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
@@ -56,6 +71,30 @@ namespace AccessControl.Web.API.Controllers
             {
             _logger.LogError($"Internal Server Error {ex.Message}");
             return StatusCode(500,$"Internal Server Error {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("OrdersOnly/{id}")]
+        public async Task<IActionResult>GetOrderOnlyById(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest("Invalid Order ID.");
+                }
+                var order = await _orderService.GetOrderOnlyByIdAsync(id);
+                _logger.LogInformation("Retrieved Order with Id {Count}", id);
+                if (order == null)
+                {
+                    return NotFound();
+                }
+                return Ok(order);
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Internal Server Error {ex.Message}");
+                return StatusCode(500, $"Internal Server Error {ex.Message}");
             }
         }
 
