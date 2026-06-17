@@ -126,8 +126,35 @@ namespace AccessControl.Web.API.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-        
-        public void Dispose()
+
+        public async Task<bool> DeleteOrderItemAsync(int orderItemId)
+        {
+            if (orderItemId<=0)
+            {
+                throw new ArgumentException("Invalid Order Item Id");
+            }
+            var orderItem = await _dbContext.OrderItems.FirstOrDefaultAsync(a => a.OrderItemId == orderItemId);
+            if (orderItem==null)
+            {
+                return false;
+            }
+            int orderId=orderItem.OrderId;
+            _dbContext.OrderItems.Remove(orderItem);
+            await _dbContext.SaveChangesAsync();
+             
+            var order= await _dbContext.Orders.Include(b=>b.OrderItems).FirstOrDefaultAsync(b=>b.OrderId==orderId);
+            if (order!=null)
+            {
+                order.TotalAmount = order.OrderItems.Sum(x => x.TotalPrice);
+                order.ModifiedBy = "System";
+                order.ModifiedDate = DateTime.UtcNow;
+
+                await _dbContext.SaveChangesAsync();
+            }
+            return true;
+        }
+   
+     public void Dispose()
         {
             _dbContext.Dispose();
         }

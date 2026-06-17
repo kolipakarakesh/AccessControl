@@ -171,6 +171,18 @@ namespace AccessControl.Web.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpDelete("orderitem/orderItemId")]
+        [AccessControlAutherise]
+        public async Task<IActionResult>DeleteOrderItem(int orderItemId)
+        {
+           var result= await _orderService.DeleteOrderItemAsync(orderItemId);
+            if (!result)
+            {
+                return NotFound("Order Item Not Found.");
+            }
+            return Ok("Order Item Deleted Successfully.");
+        }
+    
 
     }
 }
