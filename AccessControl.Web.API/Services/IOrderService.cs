@@ -11,5 +11,6 @@ namespace AccessControl.Web.API.Services
         Task<Order>CreateOrderAsync(Order order);
         Task<Order> UpdateOrderAsync(int OrderId,Order order);
         Task<bool>DeleteOrderAsync(int OrderId);
+        Task<bool> DeleteOrderItemAsync(int orderItemId);
     }
 }
