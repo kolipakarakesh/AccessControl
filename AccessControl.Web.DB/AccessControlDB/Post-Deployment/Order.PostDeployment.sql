@@ -72,31 +72,42 @@ BEGIN
         SET @OrderId = SCOPE_IDENTITY();
 
         INSERT INTO OrderItem
-        (
-            OrderId,
-            ProductId,
-            Quantity,
-            UnitPrice,
-            TotalPrice,
-            IsActive,
-            CreatedBy,
-            CreatedDate,
-            ModifiedBy,
-            ModifiedDate
+         (
+          OrderId,
+          ProductId,
+          Quantity,
+          UnitPrice,
+          TotalPrice,
+          IsActive,
+          CreatedBy,
+          CreatedDate,
+          ModifiedBy,
+          ModifiedDate
         )
-        SELECT TOP 5
-            @OrderId,
-            ProductId,
-            1 + ABS(CHECKSUM(NEWID())) % 3,
-            Price,
-            Price * (1 + ABS(CHECKSUM(NEWID())) % 3),
-            1,
-            'System',
-            GETDATE(),
-            'System',
-            GETDATE()
-        FROM Product
-        ORDER BY NEWID();
+       SELECT
+         @OrderId,
+         P.ProductId,
+         Q.Quantity,
+         P.Price,
+         P.Price * Q.Quantity,
+         1,
+         'System',
+         GETDATE(),
+         'System',
+         GETDATE()
+  
+      FROM
+      (
+      SELECT TOP 5
+        ProductId,
+        Price
+      FROM Product
+      ORDER BY NEWID()
+       ) P
+       CROSS APPLY
+       (
+           SELECT 1 + ABS(CHECKSUM(NEWID())) % 3 AS Quantity
+       ) Q;
 
         UPDATE O
         SET TotalAmount =

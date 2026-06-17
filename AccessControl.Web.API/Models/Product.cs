@@ -13,7 +13,7 @@ namespace AccessControl.Web.API.Models
         public string ProductName { get; set; } = string.Empty;
         public string ProductCode { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
         public int StockQuantity { get; set; } = 0;
         public bool IsActive { get; set; } = true;
         public string CreatedBy { get; set; } = string.Empty;

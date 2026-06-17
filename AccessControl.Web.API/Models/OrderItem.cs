@@ -15,8 +15,8 @@ namespace AccessControl.Web.API.Models
         public int OrderId { get; set; } 
         public int ProductId { get; set; } 
         public int Quantity { get; set; } 
-        public decimal? UnitPrice { get; set; }
-        public decimal? TotalPrice { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         public bool IsActive { get; set; } = true;
         public string CreatedBy { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;

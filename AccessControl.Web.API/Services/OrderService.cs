@@ -34,19 +34,57 @@ namespace AccessControl.Web.API.Services
             return await _dbContext.Orders.Include(o => o.OrderItems)
                           .FirstOrDefaultAsync(o => o.OrderId == OrderId);
         }
+        //public async Task<Order> CreateOrderAsync(Order order)
+        //{
+        //    if (order==null)
+        //    {
+
+        //        throw new ArgumentNullException("Invalid Order Object"); 
+        //    }
+        //    await _dbContext.Orders.AddAsync(order);
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return order;
+        //}
         public async Task<Order> CreateOrderAsync(Order order)
         {
-            if (order==null)
-            {
+            if (order == null)
+                throw new ArgumentNullException(nameof(order));
 
-                throw new ArgumentNullException("Invalid Order Object"); 
+            decimal totalAmount = 0;
+
+            foreach (var item in order.OrderItems)
+            {
+                var product = await _dbContext.Products
+                    .FirstOrDefaultAsync(p => p.ProductId == item.ProductId);
+
+                if (product == null)
+                    throw new Exception($"Product {item.ProductId} not found.");
+
+                item.UnitPrice = product.Price;
+                item.TotalPrice = product.Price * item.Quantity;
+                item.CreatedBy = "System";
+                item.ModifiedBy = "System";
+              
+
+                totalAmount += item.TotalPrice;
             }
+
+            order.TotalAmount = totalAmount;
+            order.OrderDate = DateTime.UtcNow;
+            order.Status = "Delivered";
+            order.OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}";
+            order.CreatedBy = "System";
+            order.CreatedDate = DateTime.UtcNow;
+            order.ModifiedBy = "System";
+            order.ModifiedDate = DateTime.UtcNow;
+            
+
             await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
 
             return order;
         }
-
         public async Task<Order> UpdateOrderAsync(int OrderId, Order order)
         {
             //find the respective object from the database using id
